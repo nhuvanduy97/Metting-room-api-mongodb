@@ -1,13 +1,25 @@
 const jwt = require("jsonwebtoken");
-const User = require("../model/userModel");
-const config = require("../config/database");
-
+const User = require("../model/userModel")
+const Role = require("../model/roleModel")
 module.exports = {
     login: function (req, res) {
-        console.log(req.username, req.password)
-        const username = req.body.username;
-        const password = req.body.password;
+        console.log("aa", req.body.username)
+        console.log("bb", req.body.password)
+        username = req.body.username,
+            password = req.body.password
+        // User.findOne({ username: req.body.username })
+        //     .populate('roleId')
+        //     .then(data => {
+        //         console.log(data);
+        //     }).catch(err => {
+        //         console.log(err);
+
+        //     })
+        // return res.json({
+        //     "OK" : "ok"
+        // })
         User.getUserByUsername(username, (err, user) => {
+            console.log("user", user)
             if (err) throw err;
             if (!user) {
                 return res.json({
@@ -15,7 +27,9 @@ module.exports = {
                     message: "User not found"
                 })
             }
-            User.comparePassword(password, user.passport, (err, isMatch) => {
+            console.log("userPassword", user.password)
+            User.comparePassword(password, user.password, (err, isMatch) => {
+                console.log("match", isMatch)
                 if (err) throw err;
                 if (isMatch) {
                     const token = jwt.sign({
@@ -26,7 +40,8 @@ module.exports = {
                             address: user.address,
                             email: user.email,
                             username: user.username,
-                            password: user.password
+                            password: user.password,
+                            roleId: user.roleId
                         }
                     }, config.secret, {
                         expiresIn: 604800 // for 1 week time in  milliseconds

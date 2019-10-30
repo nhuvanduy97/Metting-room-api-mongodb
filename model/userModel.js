@@ -1,10 +1,9 @@
-const mongoose = require('mongoose')
-const bcrypt = require('bcryptjs')
-const uniqueValidator = require("mongoose-unique-validator")
+var mongoose = require('../config/dbContext')
+const bcrypt = require('bcrypt')
 const ObjectId = mongoose.Types.ObjectId
+const Schema = mongoose.Schema
 
-
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -14,6 +13,7 @@ const UserSchema = new mongoose.Schema({
         type: ObjectId,
         required: true,
         trim: true,
+        ref: 'Role'
     },
     password: {
         type: String,
@@ -21,7 +21,6 @@ const UserSchema = new mongoose.Schema({
     },
     username: {
         type: String,
-        unique: true,
         required: true
     },
     address: {
@@ -30,29 +29,24 @@ const UserSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        unique: true,
-        index: true,
         require: true
     }
-
+}, {
+    collection: 'user'
 });
-UserSchema.plugin(uniqueValidator);
-const User = module.exports = mongoose.model('user', UserSchema);
+const User = mongoose.model('User', UserSchema);
+module.exports = User
 
-// Find user by Id
-module.exports.getUserById = function (id, callback) {
-    User.findById(id, callback);
-}
 // Find user by username
 module.exports.getUserByUsername = function (username, callback) {
     const query = {
         username : username
     }
-    User.findOne(query, callback);
+    User.findOne(query, callback).populate('roleId');
 }
-// Compare password
-module.exports.comparePassword = function(password, hash, callback) {
-    bcrypt.compare(password, hash, (err, isMatch) => {
+ // Compare password
+module.exports.comparePassword = function(password, hashPassword ,callback) {
+    bcrypt.compare(password, hashPassword ,function (err, isMatch) {
         if(err) throw err;
         callback(null, isMatch);
     })
