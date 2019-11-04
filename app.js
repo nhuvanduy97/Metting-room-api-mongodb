@@ -5,6 +5,7 @@ const passport = require("passport")
 const path = require("path")
 const PORT = process.env.PORT || 3000
 const users = require("./routers/users")
+const auth = require("./auth/auth")
 
 // Initialize the app 
 const app = express();
@@ -19,15 +20,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Passport Midleware
 app.use(passport.initialize());
 app.use(passport.session());
- 
 
 
-app.get("/", (req,res) => {
+app.get("/", auth , (req,res) => {
     console.log("req", req)
     return res.json({
         message: "Hello Server API."
     })
 })
+
+
 
 // Router
 app.use("/api", users)

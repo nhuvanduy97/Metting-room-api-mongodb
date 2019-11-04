@@ -30,7 +30,7 @@ const UserSchema = new Schema({
     email: {
         type: String,
         require: true
-    }
+    },
 }, {
     collection: 'user'
 });
