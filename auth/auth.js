@@ -1,23 +1,29 @@
-const jwt = require('jsonwebtoken')
+
+const jwt = require("jsonwebtoken")
 const config = require("../config/configDB")
-
 const auth = async (req, res, next) => {
-    const token = req.header('Authorization').replace('Bearer ', '');
-    console.log(token);
-    var decoded = jwt.verify(token, config.secret);
-    console.log(decoded)
-    if (!token) return res.status(401).send('Denied Access');
-    try {
-        console.log("begin")
-        const verify = jwt.verify(token,config.secret);
-        console.log("verify", verify)
-        req.token = verify
-        next()
-    } catch (error) {
-        // res.status(401).send({ error: 'Not authorized to access this resource' })
-        res.json({ error: 'Not authorized to access this resource' })
+    let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
+    if (token && token.startsWith('Bearer ')) {
+        // Remove Bearer from string
+        token = token.slice(7, token.length);
     }
-
+    if (token) {
+        jwt.verify(token, config.secret, (err, decoded) => {
+            if (err) {
+                return res.json({
+                    success: false,
+                    message: 'Token is not valid'
+                });
+            } else {
+                req.decoded = decoded;
+                next();
+            }
+        });
+    } else {
+        return res.json({
+            success: false,
+            message: 'Auth token is not supplied'
+        });
+    }
 }
-
 module.exports = auth

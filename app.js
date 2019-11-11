@@ -4,7 +4,10 @@ const bodyParser = require("body-parser")
 const passport = require("passport")
 const path = require("path")
 const PORT = process.env.PORT || 3000
+
+// router
 const users = require("./routers/users")
+const rooms = require("./routers/rooms")
 const auth = require("./auth/auth")
 
 // Initialize the app 
@@ -33,7 +36,7 @@ app.get("/", auth , (req,res) => {
 
 // Router
 app.use("/api", users)
-
+app.use("/api", rooms)
 
 app.listen(PORT, () => {
     console.log("server starting...")
