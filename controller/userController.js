@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../model/userModel")
 const Role = require("../model/roleModel")
+const Team = require("../model/TeamModel")
 const configDB = require("../config/configDB")
 const bcrypt = require("bcrypt")
 module.exports = {
@@ -12,7 +13,7 @@ module.exports = {
         //     });
         // });
         username = req.body.username,
-            password = req.body.password
+        password = req.body.password
         User.getUserByUsername(username, (err, user) => {
             if (err) throw err;
             if (!user) {
@@ -53,5 +54,12 @@ module.exports = {
                 }
             })
         });
+    },
+    getUserById: function(req,res) {
+        console.log("req", req.body)
+
+        res.json({
+            message: "ok"
+        })
     }
 }

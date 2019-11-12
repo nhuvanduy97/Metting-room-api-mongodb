@@ -29,8 +29,26 @@ const UserSchema = new Schema({
     },
     email: {
         type: String,
-        require: true
+        required: true
     },
+    department: {
+        type: String,
+        required: true
+    },
+    teamId: {
+        type: ObjectId,
+        required: true,
+        trim: true,
+        ref: 'Team'
+    },
+    avatar: {
+        type: String,
+        required: true
+    },
+    isInviter: {
+        type: Number,
+        required: true
+    }
 }, {
     collection: 'user'
 });
@@ -42,7 +60,7 @@ module.exports.getUserByUsername = function (username, callback) {
     const query = {
         username : username
     }
-    User.findOne(query, callback).populate('roleId');
+    User.findOne(query, callback).populate('roleId').populate('teamId');
 }
  // Compare password
 module.exports.comparePassword = function(password, hashPassword ,callback) {
