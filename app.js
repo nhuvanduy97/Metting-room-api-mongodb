@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3000
 // router
 const users = require("./routers/users")
 const rooms = require("./routers/rooms")
+const booking = require("./routers/booking")
 const auth = require("./auth/auth")
 
 // Initialize the app 
@@ -37,6 +38,7 @@ app.get("/", auth , (req,res) => {
 // Router
 app.use("/api", users)
 app.use("/api", rooms)
+app.use("/api", booking)
 
 app.listen(PORT, () => {
     console.log("server starting...")

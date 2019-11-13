@@ -1,9 +1,11 @@
 const jwt = require("jsonwebtoken");
+var mongoose = require('../config/dbContext')
 const User = require("../model/userModel")
 const Role = require("../model/roleModel")
 const Team = require("../model/TeamModel")
 const configDB = require("../config/configDB")
 const bcrypt = require("bcrypt")
+const ObjectId = mongoose.Types.ObjectId
 module.exports = {
     login: function (req, res) {
         // bcrypt.genSalt(12, function(err, salt) {
@@ -55,11 +57,13 @@ module.exports = {
             })
         });
     },
-    getUserById: function(req,res) {
-        console.log("req", req.body)
-
-        res.json({
-            message: "ok"
+    getUserByTeamId: function(req,res) {
+        User.find({teamId: ObjectId(req.query.teamId) }).exec((err, member) => {
+            if(err) throw err;
+            res.json({
+                message: true,
+                members: member
+            })
         })
     }
 }
