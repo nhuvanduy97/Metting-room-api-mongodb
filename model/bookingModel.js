@@ -1,5 +1,6 @@
 var mongoose = require('../config/dbContext')
 const ObjectId = mongoose.Types.ObjectId
+const Room = require("../model/roomModel")
 const Schema = mongoose.Schema
 
 const BookingSchema = new Schema({
@@ -8,8 +9,9 @@ const BookingSchema = new Schema({
         required: true
     },
     room: {
-        type: String,
-        required: true
+        type: ObjectId,
+        required: true,
+        ref: 'Room'
     },
     date: {
         type: String,
@@ -23,10 +25,12 @@ const BookingSchema = new Schema({
         type: String,
         required: true
     },
-    inviters: {
-        type: Array,
-        required: true
-    },
+    inviters: [
+        {
+            type: ObjectId,
+            ref: 'User'
+        }
+    ],
     note: {
         type: String,
         required: true
@@ -34,6 +38,11 @@ const BookingSchema = new Schema({
     status: {
         type: Number,
         required: true
+    },
+    user: {
+        type: ObjectId,
+        required: true,
+        ref: 'User'
     }
 } , {collection: 'booking'})
 

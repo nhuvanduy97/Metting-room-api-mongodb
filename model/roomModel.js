@@ -1,4 +1,6 @@
 const mongoose = require('../config/dbContext')
+const ObjectId = mongoose.Types.ObjectId
+const User = require("../model/userModel")
 const Schema = mongoose.Schema
 const roomSchema = new Schema({
     name: {
@@ -18,6 +20,11 @@ const roomSchema = new Schema({
     des: {
         type: String,
         required: true
+    },
+    manager: {
+        type: ObjectId,
+        required: true,
+        ref: 'User'
     }
 }, {
     collection: 'room'
