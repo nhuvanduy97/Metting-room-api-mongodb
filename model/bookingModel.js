@@ -1,6 +1,8 @@
 var mongoose = require('../config/dbContext')
 const ObjectId = mongoose.Types.ObjectId
 const Room = require("../model/roomModel")
+// const timeZoe = require('mongoose-timezone')
+
 const Schema = mongoose.Schema
 
 const BookingSchema = new Schema({

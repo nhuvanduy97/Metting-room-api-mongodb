@@ -4,5 +4,6 @@ const notificationController = require("../controller/notificationController")
 const auth = require("../auth/auth")
 
 router.get("/get-notification", auth , notificationController.getNotification)
+router.get("/get-notification-by-id-receiver", auth , notificationController.getNotificationByIdReceiver)
 
 module.exports = router;
