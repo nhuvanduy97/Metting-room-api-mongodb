@@ -2,7 +2,7 @@ const Booking = require("../model/bookingModel")
 const Notification = require("../model/notificationModel")
 const Room = require("../model/roomModel")
 const User = require("../model/userModel")
-
+const nodemailer = require("nodemailer")
 
 module.exports = {
     getAllBooking: function (req, res) {
@@ -50,18 +50,33 @@ module.exports = {
                             create_at: new Date(),
                             status: 0,
                             type: 0,
-                            message: user.name + " created booking room " + room.name +"<br />" + "Date: " + result.date +"<br />"+ " Start time: "+ result.startTime + "  End time: " + result.endTime,
+                            message: "<u>"+user.name+"</u>" + " created booking room " + room.name +"<br />" + "Date: " + result.date +"<br />"+ " Start time: "+ result.startTime + "  End time: " + result.endTime,
                             idBooking: result._id,
                             idReceiver: room.manager
                         })
                         Noti.save(function (err, rs) {
                             if (err) throw err;
                             console.log(rs)
+                        });
+                        
+                        let transporter = nodemailer.createTransport({
+                            host: "smtp.ethereal.email",
+                            port: 587,
+                            secure: false,
+                            auth: { 
+                                user: 'haichanbo11@gmail.com',
+                                pass: 'haichanbo'
+                            }
                         })
+                        let info = transporter.sendMail({
+                            from: 'haichanbo11@gmail.com',
+                            to: "nhuvanduy97@gmail.com",
+                            subject: "Test",
+                            text: "aaaa",
+                            html: "<b>Hello</b>"
+                        });
+                        console.log(info.messageId)
                     })
-
-
-                  
                 })
             } else {
                 return res.json({

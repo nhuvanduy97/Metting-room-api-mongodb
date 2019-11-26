@@ -50,5 +50,19 @@ module.exports = {
             }
         })
         
+    },
+    makupNotification: function(req, res) {
+        Notification.findByIdAndUpdate(req.body._id,{
+            $set: {
+                status: 1
+            },
+        }, {upsert: true}, function(err, result) {
+            if (err) throw err;
+            if (result){
+                return  res.json({
+                    message: true
+                })
+            }
+        })
     }
 }
