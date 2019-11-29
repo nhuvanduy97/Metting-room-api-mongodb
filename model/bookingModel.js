@@ -33,6 +33,12 @@ const BookingSchema = new Schema({
             ref: 'User'
         }
     ],
+    members: [
+        {
+            type: ObjectId,
+            ref: 'User'
+        }
+    ],
     note: {
         type: String,
         required: true

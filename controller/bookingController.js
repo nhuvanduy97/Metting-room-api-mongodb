@@ -24,6 +24,22 @@ module.exports = {
         })
 
     },
+
+    findBooking: function (req, res) {
+        let query = {
+            room: req.query.room,
+            date: req.query.date,
+    
+        }
+        Booking.find(query).exec((err, result) => {
+            if(err) throw err;
+            res.json({
+                message: true,
+                result: result
+            })
+        })
+        
+    },
     reserveRoom: function (req, res) {
         let data = req.body
         let newBooking = new Booking({
@@ -35,7 +51,8 @@ module.exports = {
             note: data.note,
             status: 0,
             inviters: data.inviters,
-            user: req.decoded.data._id
+            user: req.decoded.data._id,
+            members: data.members
         })
         newBooking.save(function (err, result) {
             if (result) {
@@ -59,23 +76,23 @@ module.exports = {
                             console.log(rs)
                         });
                         
-                        let transporter = nodemailer.createTransport({
-                            host: "smtp.ethereal.email",
-                            port: 587,
-                            secure: false,
-                            auth: { 
-                                user: 'haichanbo11@gmail.com',
-                                pass: 'haichanbo'
-                            }
-                        })
-                        let info = transporter.sendMail({
-                            from: 'haichanbo11@gmail.com',
-                            to: "nhuvanduy97@gmail.com",
-                            subject: "Test",
-                            text: "aaaa",
-                            html: "<b>Hello</b>"
-                        });
-                        console.log(info.messageId)
+                        // let transporter = nodemailer.createTransport({
+                        //     host: "smtp.ethereal.email",
+                        //     port: 587,
+                        //     secure: false,
+                        //     auth: { 
+                        //         user: 'haichanbo11@gmail.com',
+                        //         pass: 'haichanbo'
+                        //     }
+                        // })
+                        // let info = transporter.sendMail({
+                        //     from: 'haichanbo11@gmail.com',
+                        //     to: "nhuvanduy97@gmail.com",
+                        //     subject: "Test",
+                        //     text: "aaaa",
+                        //     html: "<b>Hello</b>"
+                        // });
+                        // console.log(info.messageId)
                     })
                 })
             } else {
