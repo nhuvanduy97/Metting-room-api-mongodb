@@ -40,8 +40,40 @@ module.exports = {
         })
         
     },
+    updateBooking: function (req, res) {
+        Booking.findByIdAndUpdate(req.body._id, {
+            $set: {
+                status: 1
+            },
+        }, {upsert: true} ,function(err, result){
+            if (err) throw err;
+            if (result){
+                res.json({
+                    message: true
+                })
+                Room.findById(result.room, function (err, room) {
+                    if (err) throw err;
+                    User.findById(result.user, function(err, user) {
+                        if (err) throw err;
+                        let Noti = new Notification({
+                            create_at: new Date(),
+                            status: 0,
+                            type: 0,
+                            message: "<u>"+ room.name+ "</u>" + " is accepted. Please invited members" + "<br />" + "Date: " + result.date +"<br />"+ " Start time: "+ result.startTime + "  End time: " + result.endTime,
+                            idBooking: result._id,
+                            idReceiver: user._id
+                        })
+                        Noti.save(function (err, rs) {
+                            if (err) throw err;
+                            console.log(rs)
+                        });
+                    })
+                })
+            }
+        })
+    },
     reserveRoom: function (req, res) {
-        let data = req.body
+        let data = req.body;
         let newBooking = new Booking({
             title: data.title,
             room: data.room,
@@ -55,6 +87,7 @@ module.exports = {
             members: data.members
         })
         newBooking.save(function (err, result) {
+            if (err) throw err;
             if (result) {
                 res.json({
                     success: true
@@ -67,32 +100,13 @@ module.exports = {
                             create_at: new Date(),
                             status: 0,
                             type: 0,
-                            message: "<u>"+user.name+"</u>" + " created booking room " + room.name +"<br />" + "Date: " + result.date +"<br />"+ " Start time: "+ result.startTime + "  End time: " + result.endTime,
+                            message: "<u>"+ user.name + "</u>" + "is created booking room " + room.name +"<br />" + "Date: " + result.date +"<br />"+ " Start time: "+ result.startTime + "  End time: " + result.endTime,
                             idBooking: result._id,
                             idReceiver: room.manager
                         })
                         Noti.save(function (err, rs) {
                             if (err) throw err;
-                            console.log(rs)
                         });
-                        
-                        // let transporter = nodemailer.createTransport({
-                        //     host: "smtp.ethereal.email",
-                        //     port: 587,
-                        //     secure: false,
-                        //     auth: { 
-                        //         user: 'haichanbo11@gmail.com',
-                        //         pass: 'haichanbo'
-                        //     }
-                        // })
-                        // let info = transporter.sendMail({
-                        //     from: 'haichanbo11@gmail.com',
-                        //     to: "nhuvanduy97@gmail.com",
-                        //     subject: "Test",
-                        //     text: "aaaa",
-                        //     html: "<b>Hello</b>"
-                        // });
-                        // console.log(info.messageId)
                     })
                 })
             } else {
