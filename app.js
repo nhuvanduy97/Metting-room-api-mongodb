@@ -10,6 +10,7 @@ const users = require("./routers/users")
 const rooms = require("./routers/rooms")
 const booking = require("./routers/booking")
 const notification = require("./routers/notification")
+const permisson = require("./routers/permisson")
 const auth = require("./auth/auth")
 
 // Initialize the app 
@@ -41,6 +42,7 @@ app.use("/api", users)
 app.use("/api", rooms)
 app.use("/api", booking)
 app.use("/api",notification)
+app.use("/api",permisson)
 
 app.listen(PORT, () => {
     console.log("server starting...")

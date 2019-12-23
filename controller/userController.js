@@ -65,5 +65,14 @@ module.exports = {
                 members: member
             })
         })
+    },
+    getInfoUserById: function(req,res) {
+       User.findById({_id: ObjectId(req.query._id)}).populate('teamId').exec((err, member) => {
+           if (err) throw err
+           res.json({
+               success: true,
+               member
+           })
+       })
     }
 }

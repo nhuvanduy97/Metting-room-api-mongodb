@@ -6,4 +6,5 @@ const userController = require("../controller/userController")
 
 router.post("/login", userController.login)
 router.get("/get-user-by-teamid",auth ,userController.getUserByTeamId)
+router.get("/get-user-by-id", auth, userController.getInfoUserById)
 module.exports = router;

@@ -49,6 +49,8 @@ module.exports = {
             return res.json({
                 message: true
             })
+        }).catch(err => {
+            Promise.reject(err)
         })
     }
 }
