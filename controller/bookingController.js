@@ -67,12 +67,6 @@ module.exports = {
             }
         })
     },
-    findMemberBooking: function (req, res) {
-        console.log(req.query._id);
-        Booking.find({members: {$elemMatch: req.query_id }}, (err, result) => {
-            console.log(result)
-        })
-    },
     updateBooking: function (req, res) {
         Booking.findByIdAndUpdate(req.body._id, {
             $set: {
